@@ -4,8 +4,12 @@
     <RootNamespace>BasicModTest</RootNamespace>
     <Company>Nukepayload2</Company>
     <TargetFramework>net472</TargetFramework>
+    <!-- 代办: 改成你本地 B1CSharpLoader 仓库的路径 -->
+    <!-- TODO: Change it to the path of B1CSharpLoader repo. -->
     <B1CSharpLoaderPath>G:\Projects\B1CSharpLoader\</B1CSharpLoaderPath>
     <GameDllDir>$(B1CSharpLoaderPath)GameDll\</GameDllDir>
+    <!-- 代办: 改成你本地 CSharpLoader 的安装路径 -->
+    <!-- TODO: Change it to the path of binary installation location of CSharpLoader -->
     <CSharpLoaderDir>G:\Program Files\SteamLibrary\steamapps\common\BlackMythWukong\b1\Binaries\Win64\CSharpLoader\</CSharpLoaderDir>
     <CSharpLoaderMyModDir>$(CSharpLoaderDir)Mods\$(AssemblyName)\</CSharpLoaderMyModDir>
     <MyType>None</MyType>
@@ -31,7 +35,7 @@
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="G:\Projects\B1VBModFramework\Nukepayload2.GameMods.BlackMythWukong\Nukepayload2.GameMods.BlackMythWukong.vbproj" />
+    <ProjectReference Include="..\..\Nukepayload2.GameMods.BlackMythWukong\Nukepayload2.GameMods.BlackMythWukong.vbproj" />
     <ProjectReference Include="$(B1CSharpLoaderPath)CSharpModBase\CSharpModBase.csproj" />
   </ItemGroup>
   <ItemGroup>
