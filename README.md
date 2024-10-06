@@ -14,3 +14,5 @@ Requires [B1CSharpLoader 0.0.6](https://github.com/czastack/B1CSharpLoader)
 WIP.
 
 We'll publish a VB project template and then complete this part.
+
+You can try to edit and run [Examples](Examples/BasicModTest.sln) before the project template is ready. `BasicModTest.vbproj` and `My Project\launchSettings.json` have hard coded paths to modify.
