@@ -4,6 +4,8 @@
     <RootNamespace>Nukepayload2.GameMods.BlackMythWukong</RootNamespace>
     <Company>Nukepayload2</Company>
     <TargetFramework>net472</TargetFramework>
+    <!-- 代办: 改成你本地 B1CSharpLoader 仓库的路径 -->
+    <!-- TODO: Change it to the path of B1CSharpLoader repo. -->
     <B1CSharpLoaderPath>G:\Projects\B1CSharpLoader\</B1CSharpLoaderPath>
     <GameDllDir>$(B1CSharpLoaderPath)GameDll\</GameDllDir>
     <MyType>None</MyType>
