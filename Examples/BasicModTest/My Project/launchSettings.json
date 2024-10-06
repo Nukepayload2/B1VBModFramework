@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "b1.exe": {
+      "commandName": "Executable",
+      "workingDirectory": "G:\\Program Files\\SteamLibrary\\steamapps\\common\\BlackMythWukong\\b1\\Binaries\\Win64\\CSharpLoader",
+      "executablePath": "G:\\Program Files\\SteamLibrary\\steamapps\\common\\BlackMythWukong\\b1\\Binaries\\Win64\\b1-Win64-Shipping.exe"
+    }
+  }
+}

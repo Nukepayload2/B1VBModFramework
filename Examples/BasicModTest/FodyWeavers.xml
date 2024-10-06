@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
+  <!-- FullImport="true"  NamespacePrefix="Renamed" -->
+  <ILMerge>
+    <ExcludeAssemblies>System|System.Text.Json|mscorlib|netstandard|System.Buffers|System.Collections.Immutable|System.Memory|System.Numerics.Vectors|System.Reflection.Metadata|System.Runtime.CompilerServices.Unsafe|System.Text.Encodings.Web|System.Threading.Tasks.Extensions|System.ValueTuple|UnrealEngine|UnrealEngine.Runtime|Protobuf.RunTime|BtlSvr.Main|B1UI_GSE.Script|b1.Native|b1.NativePlugins|GSE.Core|Google.Protobuf|System.Core|GSE.ProtobufDB|CSharpModBase</ExcludeAssemblies>
+  </ILMerge>
+</Weavers>
