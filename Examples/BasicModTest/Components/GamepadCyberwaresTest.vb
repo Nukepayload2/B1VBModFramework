@@ -198,9 +198,12 @@ Class GamepadCyberwaresTest
             ' 开始慢动作，等待一定时间之后结束这个慢动作
             ActiveWorld.SetGlobalTimeDilation(0.4)
             EffectEndTimer.Start()
+
+            ShowTip("克伦齐科夫已激活，反应敏捷，直击要害！")
         End Sub
 
         Private Sub EndSlowEffect() Handles EffectEndTimer.Tick
+            If _kerenzikovStatus <> KerenzikovStatus.Activated Then Return
             _kerenzikovStatus = KerenzikovStatus.ProtectionActivated
 
             EffectEndTimer.Stop()
@@ -227,6 +230,7 @@ Class GamepadCyberwaresTest
         End Sub
 
         Private Sub EndProtectionEffect() Handles ProtectionEffectEndTimer.Tick
+            If _kerenzikovStatus <> KerenzikovStatus.ProtectionActivated Then Return
             _kerenzikovStatus = KerenzikovStatus.Ready
 
             ProtectionEffectEndTimer.Stop()
@@ -249,9 +253,11 @@ Class GamepadCyberwaresTest
         End Sub
 
         Public Sub Dispose() Implements IDisposable.Dispose
-            ' 换场景了，效果要清掉
+            ' 换场景了，重置
             ProtectionEffectEndTimer.Stop()
             EffectEndTimer.Stop()
+            _lastStatus = Nothing
+            _kerenzikovStatus = KerenzikovStatus.Ready
         End Sub
     End Class
 
@@ -310,6 +316,10 @@ Class GamepadCyberwaresTest
     Private _cyberwareStartActor As AActor
     Private ReadOnly _activeCyberwares As New Stack(Of ICyberware)
 
+    Private ReadOnly _cyberwares As ICyberware() = {
+        New Cyberware1活血泵, New Cyberware2狂暴, New Cyberware3克伦齐科夫, New Cyberware4量子调谐
+    }
+
     Private Sub CyberwareWhenLeftRightStickPressed(e As KeyEventArgs)
         Dim player = e.Player
         Dim actor = player.GetControlledPawn
@@ -321,14 +331,8 @@ Class GamepadCyberwaresTest
 
         Dim curCyberware As ICyberware
         Select Case _activeCyberwares.Count
-            Case 0
-                curCyberware = New Cyberware1活血泵
-            Case 1
-                curCyberware = New Cyberware2狂暴
-            Case 2
-                curCyberware = New Cyberware3克伦齐科夫
-            Case 3
-                curCyberware = New Cyberware4量子调谐
+            Case 0 To 3
+                curCyberware = _cyberwares(_activeCyberwares.Count)
             Case Else
                 ShowTip("秘技最多只能叠四层")
                 Return
@@ -387,7 +391,7 @@ Class GamepadCyberwaresTest
             CyberwareWhenLeftRightStickPressed(e)
         ElseIf Not _tipShown Then
             ShowTip("你按下了左摇杆，同时按右摇杆使用秘技")
-            _tipShown = False
+            _tipShown = True
         End If
     End Sub
 
