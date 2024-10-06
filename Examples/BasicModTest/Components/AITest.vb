@@ -6,6 +6,8 @@ Imports BtlShare
 Class AITest
     Inherits ModComponentBase
 
+    ' 实验失败，这个功能无法启用，因为发出 HTTP 请求会产生运行时异常。
+
     Private Async Sub PrintPlayerInfoAI()
         Dim player = My.Player.Pawn
         If player Is Nothing Then
