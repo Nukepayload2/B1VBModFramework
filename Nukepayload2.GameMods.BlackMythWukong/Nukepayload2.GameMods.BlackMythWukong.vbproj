@@ -4,12 +4,14 @@
     <RootNamespace>Nukepayload2.GameMods.BlackMythWukong</RootNamespace>
     <Company>Nukepayload2</Company>
     <TargetFramework>net472</TargetFramework>
-    <GameDllDir>G:\Projects\B1CSharpLoader\GameDll\</GameDllDir>
+    <B1CSharpLoaderPath>G:\Projects\B1CSharpLoader\</B1CSharpLoaderPath>
+    <GameDllDir>$(B1CSharpLoaderPath)GameDll\</GameDllDir>
     <MyType>None</MyType>
     <NoWarn></NoWarn>
+    <Version>1.0.0-alpha1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="G:\Projects\B1CSharpLoader\CSharpModBase\CSharpModBase.csproj" />
+    <ProjectReference Include="$(B1CSharpLoaderPath)CSharpModBase\CSharpModBase.csproj" />
   </ItemGroup>
   <ItemGroup>
     <GameDll Include="System.Runtime.Serialization" />
