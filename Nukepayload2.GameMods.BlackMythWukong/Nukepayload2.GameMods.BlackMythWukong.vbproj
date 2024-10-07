@@ -10,6 +10,7 @@
     <GameDllDir>$(B1CSharpLoaderPath)GameDll\</GameDllDir>
     <MyType>None</MyType>
     <NoWarn></NoWarn>
+    <VBRuntime>Embed</VBRuntime>
     <Version>1.0.0-alpha1</Version>
   </PropertyGroup>
   <ItemGroup>
@@ -28,9 +29,6 @@
     <GameDll Include="Google.Protobuf" />
     <GameDll Include="System.Core" />
     <GameDll Include="GSE.ProtobufDB" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
