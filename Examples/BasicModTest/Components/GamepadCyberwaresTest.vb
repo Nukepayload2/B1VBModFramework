@@ -321,6 +321,8 @@ Class GamepadCyberwaresTest
     }
 
     Private Sub CyberwareWhenLeftRightStickPressed(e As KeyEventArgs)
+        HardResetWhenPlayerDead()
+
         Dim player = e.Player
         Dim actor = player.GetControlledPawn
         If actor Is Nothing Then
@@ -346,20 +348,24 @@ Class GamepadCyberwaresTest
         CyberwareLevelTimer.Start()
     End Sub
 
+    Private _lastEvents As Object
+    Private Sub HardResetWhenPlayerDead()
+        Dim curEvents = My.Player.EventCollection
+        If curEvents IsNot _lastEvents Then
+            _lastEvents = curEvents
+            My.Player.EventCollection.Evt_UnitDead += New Del_UnitDead(AddressOf HardReset)
+        End If
+    End Sub
+
     Private Sub CyberwareLevelTimer_Tick(sender As Object, e As EventArgs) Handles CyberwareLevelTimer.Tick
         Dim controller = My.Player.Controller
         Dim actor = controller?.GetControlledPawn
 
         If actor Is Nothing OrElse _cyberwareStartActor IsNot actor OrElse actor.IsDestroyed OrElse actor.IsActorBeingDestroyed Then
             ' 读档或者换大地图了
-            For Each cy In _activeCyberwares.OfType(Of IDisposable)
-                cy.Dispose()
-            Next
-            _activeCyberwares.Clear()
-            CyberwareLevelTimer.Stop()
+            HardReset()
             Return
         End If
-
         If _activeCyberwares.Count > 0 Then
             ' 退出当前层的义体
             Dim lastCyberware = _activeCyberwares.Pop
@@ -374,6 +380,14 @@ Class GamepadCyberwaresTest
                 CyberwareLevelTimer.Start()
             End If
         End If
+    End Sub
+
+    Private Sub HardReset()
+        For Each cy In _activeCyberwares.OfType(Of IDisposable)
+            cy.Dispose()
+        Next
+        _activeCyberwares.Clear()
+        CyberwareLevelTimer.Stop()
     End Sub
 
     ' 判定左右摇杆都按下了
