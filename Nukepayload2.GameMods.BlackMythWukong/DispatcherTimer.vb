@@ -68,7 +68,15 @@ Public Class Dispatcher
     ''' 在后台工作线程执行代码。
     ''' </summary>
     Public Shared ReadOnly Property WorkerThread As New Dispatcher(
-        Sub(action) action(),
+        Sub(action)
+            Dim hWait As New SemaphoreSlim(0, 1)
+            ThreadPool.QueueUserWorkItem(
+            Sub(unused)
+                action()
+                hWait.Release()
+            End Sub)
+            hWait.Wait()
+        End Sub,
         Sub(action) ThreadPool.QueueUserWorkItem(Sub(unused) action()))
 
     Public Sub Invoke(action As FSimpleDelegate)
@@ -90,7 +98,7 @@ Public Class GamePlayDispatcher
     Private Shared _registered As Boolean
     Private Shared ReadOnly _regTimer As New Timer(AddressOf RepeatRegister_Tick)
     ''' <summary>
-    ''' 共享实例，不为空，但是随着游戏读盘会换实例
+    ''' 共享实例，不为空，但是随着游戏读盘会重新注册，存在空档期
     ''' </summary>
     Public Shared ReadOnly Property Instance As New GamePlayDispatcher(True)
     Public ReadOnly Property IsEnabled As Boolean
