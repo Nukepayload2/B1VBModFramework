@@ -11,7 +11,7 @@
     <MyType>None</MyType>
     <NoWarn></NoWarn>
     <VBRuntime>Embed</VBRuntime>
-    <Version>1.0.0-alpha1</Version>
+    <Version>1.0.0-alpha2</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="$(B1CSharpLoaderPath)CSharpModBase\CSharpModBase.csproj" />
@@ -29,6 +29,10 @@
     <GameDll Include="Google.Protobuf" />
     <GameDll Include="System.Core" />
     <GameDll Include="GSE.ProtobufDB" />
+    <InternalsAssemblyName Include="B1UI_GSE.Script" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Nukepayload2.SourceGenerators.IgnoresAccessChecksTo" Version="1.1.0" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

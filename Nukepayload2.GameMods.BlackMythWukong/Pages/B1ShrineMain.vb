@@ -1,22 +1,18 @@
-﻿Imports b1
-Imports B1UI
-Imports B1UI.GSUI
-Imports GSE.GSUI
-Imports System.Reflection
+﻿Imports B1UI.GSUI
 Imports UnrealEngine.UMG
 
 Public Class B1ShrineMain
+    Inherits B1UIWrapper(Of UIShrineMain)
+
+    Protected Overrides ReadOnly Property PageId As EnPageID
+        Get
+            Return EnPageID.ShrineMain
+        End Get
+    End Property
 
     Public ReadOnly Property ShrineMain As UIShrineMain
         Get
-            Dim worldContext = My.Player.Pawn
-
-            Dim value = TryCast(GSUI.UIMgr.FindUIPage(worldContext, 7), UIShrineMain)
-            If value Is Nothing Then
-                BGUFunctionLibraryManaged.BGUSwitchPage(ActiveWorld, EUIPageID.ShrineMain)
-                value = TryCast(GSUI.UIMgr.FindUIPage(worldContext, 7), UIShrineMain)
-            End If
-            Return value
+            Return Page
         End Get
     End Property
 
@@ -103,25 +99,5 @@ Public Class B1ShrineMain
             Return TryGetField(Of UIDelayEvent)(NameOf(UpdatePicDelayEvent))
         End Get
     End Property
-
-    Private Function TryGetField(Of TResult As Class)(fieldName As String) As TResult
-        Dim instance = ShrineMain
-        If instance Is Nothing Then Return Nothing
-        Dim fldShrineMenuHelper = GetType(UIShrineMain).GetField(fieldName, BindingFlags.NonPublic Or BindingFlags.Instance)
-        If fldShrineMenuHelper Is Nothing Then Return Nothing
-        Return TryCast(fldShrineMenuHelper.GetValue(instance), TResult)
-    End Function
-
-    Private Function TryGetFieldValue(Of TResult As Structure)(fieldName As String) As TResult?
-        Dim instance = ShrineMain
-        If instance Is Nothing Then Return Nothing
-        Dim fldShrineMenuHelper = GetType(UIShrineMain).GetField(fieldName, BindingFlags.NonPublic Or BindingFlags.Instance)
-        If fldShrineMenuHelper Is Nothing Then Return Nothing
-        Dim result = fldShrineMenuHelper.GetValue(instance)
-        If TypeOf result Is TResult Then
-            Return DirectCast(result, TResult)
-        End If
-        Return Nothing
-    End Function
 
 End Class

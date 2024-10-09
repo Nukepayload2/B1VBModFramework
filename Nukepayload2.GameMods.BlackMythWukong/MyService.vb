@@ -1,5 +1,8 @@
 ﻿Imports b1
 Imports b1.BGW
+Imports b1.Plugins.AkAudio
+Imports B1UI.GSUI
+Imports Nukepayload2.GameMods.BlackMythWukong.Media
 Imports UnrealEngine.Engine
 Imports UnrealEngine.Runtime
 
@@ -11,6 +14,17 @@ Namespace MyService
         ''' </summary>
         Public ReadOnly Property ContextMenu As New MenuFlyout
 
+        Public ReadOnly Property CanEnterTakePhotoMode As Boolean
+            Get
+                Return GSB1UIUtil.GetIsCanEnterTakePhotoMode(My.World.Instance, True)
+            End Get
+        End Property
+
+        Public Sub NavigateTo(pageName As String)
+            pageName.RequireNotNull(NameOf(pageName))
+
+            UGameplayStatics.OpenLevel(My.World.Instance, New FName(pageName))
+        End Sub
     End Class
 
     Public Class ComputerProxy
@@ -48,6 +62,39 @@ Namespace MyService
                 Return InputManager
             End Get
         End Property
+
+        Public ReadOnly Property Audio As New AudioProxy
+    End Class
+
+    Public Class AudioProxy
+        ''' <summary>
+        ''' 播放指定的系统声音。
+        ''' </summary>
+        ''' <param name="systemSoundName">自定义的系统声音名称</param>
+        Public Shared Sub PlaySystemSound(systemSoundName As String)
+            B1UI.Script.GSUI.Util.GSUIAudioUtil.PlayUISound(systemSoundName)
+        End Sub
+
+        ''' <summary>
+        ''' 播放指定的系统声音。
+        ''' </summary>
+        ''' <param name="systemSound">预设的系统声音</param>
+        Public Shared Sub PlaySystemSound(systemSound As SystemSound)
+            B1UI.Script.GSUI.Util.GSUIAudioUtil.PlayUISound(systemSound.ToString)
+        End Sub
+
+        ''' <summary>
+        ''' 播放指定资源的声音。
+        ''' </summary>
+        ''' <param name="resourceUri">
+        ''' 例如：/Game/00Main/Audio/SFX/UI/HUD/EVT_ui_hud_hint_itembig_disappear.EVT_ui_hud_hint_itembig_disappear
+        ''' </param>
+        Public Shared Sub PlayBank(resourceUri As String)
+            Dim bankName = $"AkAudioEvent'{resourceUri}'"
+            B1UI.Script.GSUI.Util.GSUIAudioUtil.PlayUISoundWithAkEvent(
+                B1UI.Script.GSUI.Util.GSUIAudioUtil.LoadBank(bankName),
+                New List(Of EAkCallbackType), Nothing)
+        End Sub
     End Class
 
     Public Class WorldProxy
