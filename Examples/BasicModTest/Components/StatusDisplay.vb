@@ -1,4 +1,5 @@
 ﻿Imports BtlShare
+Imports Nukepayload2.GameMods.BlackMythWukong.Media
 Imports UnrealEngine.InputCore
 
 Class StatusDisplay
@@ -29,6 +30,7 @@ Class StatusDisplay
         Dim sta = player.Value(EBGUAttrFloat.Stamina)
         Dim staMax = player.Value(EBGUAttrFloat.StaminaMax)
 
+        My.Computer.Audio.PlaySystemSound(SystemSound.ChapterAwardItemShow)
         Await MsgBoxAsync($"玩家状态：
 生命值 {hp}/{hpMax}
 法力值 {mp}/{mpMax}
