@@ -29,10 +29,6 @@
     <GameDll Include="Google.Protobuf" />
     <GameDll Include="System.Core" />
     <GameDll Include="GSE.ProtobufDB" />
-    <InternalsAssemblyName Include="B1UI_GSE.Script" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Nukepayload2.SourceGenerators.IgnoresAccessChecksTo" Version="1.1.0" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
