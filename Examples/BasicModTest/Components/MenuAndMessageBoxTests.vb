@@ -141,7 +141,7 @@ Class MenuAndMessageBoxTests
     End Sub
 
     Private Async Sub BtnShowInputBox_Click(sender As Object, e As EventArgs) Handles BtnShowInputBox.Click
-        Dim result = Await InputBoxAsync("消息", "标题")
+        Dim result = Await InputBoxAsync("输入一些东西。在文本框里面按回车可以提交，点击确定按钮也可以提交。按 × 按钮取消。", "测试用的输入框")
         ShowTip($"你的输入是 {result}")
         If result IsNot Nothing Then
             Try
