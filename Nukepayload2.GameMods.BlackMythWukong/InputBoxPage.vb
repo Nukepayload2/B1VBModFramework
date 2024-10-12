@@ -27,37 +27,30 @@ Public Class InputBoxPage
         For Each childPage In children
             Select Case childPage?.GetType
                 Case GetType(B1UI.GSUI.VIMiniGMPanel)
-                    DirectCast(childPage, B1UI.GSUI.VIMiniGMPanel).GSSetVisiable(False)
+                    With DirectCast(childPage, B1UI.GSUI.VIMiniGMPanel)
+                        .ShowIn()
+                        Dim widget = .GetRootUserWidget
+                        For Each panel In VisualTreeHelper.GetParents(widget)
+                            Select Case panel.GetName
+                                Case "MainCon"
+                                    Dim canvasPanel = TryCast(panel, UCanvasPanel)
+                                    If canvasPanel IsNot Nothing Then
+                                        Dim titleBox = CreateTitleTextBlock(panel)
+                                        canvasPanel.AddChildToCanvas(titleBox).SetOffsets(
+                                            New FMargin With {.Left = 4, .Top = 4})
+                                    End If
+                                Case "CommCon"
+                                    Dim overlay = TryCast(panel, UOverlay)
+                                    If overlay IsNot Nothing Then
+                                        Dim descBox = CreateDescriptionTextBlock(panel)
+                                        overlay.AddChildToOverlay(descBox).SetPadding(
+                                            New FMargin With {.Left = 4, .Top = 4, .Bottom = 4, .Right = 4})
+                                    End If
+                            End Select
+                        Next
+                    End With
                 Case GetType(B1UI.GSUI.VIMiniGMTab)
-                    Dim tabControl = DirectCast(childPage, B1UI.GSUI.VIMiniGMTab)
-                    tabControl.SetVisable(True)
-                    Dim titleControl = tabControl.FindChildWidget("Title")
-                    Dim utb = TryCast(titleControl, UTextBlock)
-                    If utb IsNot Nothing Then
-                        If tabIndex = 0 Then
-                            If Title IsNot Nothing Then
-                                utb.SetText(Title.AsFText)
-                            End If
-                        ElseIf tabIndex = 1 Then
-                            tabControl.SetVisable(False)
-                        End If
-
-                        Console.WriteLine($"Title text is {utb.GetText}, tracing parents...")
-                        Dim curCtl As UWidget = utb
-                        Dim index = 0
-                        Do
-                            Console.WriteLine($"  Ancestor level {index } is {curCtl.GetName} As {curCtl.GetType.FullName}")
-                            If TypeOf curCtl Is UOverlay Then
-                                Dim overlay = DirectCast(curCtl, UOverlay)
-                                Dim txtDesc2 = UObject.NewObject(Of UTextBlock)(overlay)
-                                txtDesc2.SetText("试试动态添加一个控件？".AsFText)
-                                overlay.AddChildToOverlay(txtDesc2)
-                            End If
-                            curCtl = curCtl.GetParent
-                            index += 1
-                        Loop Until curCtl Is Nothing
-                    End If
-                    tabIndex += 1
+                    DirectCast(childPage, B1UI.GSUI.VIMiniGMTab).SetVisable(False)
                 Case GetType(B1UI.GSUI.VIMiniGMQuickPanel)
                     DirectCast(childPage, B1UI.GSUI.VIMiniGMQuickPanel).ShowOut()
             End Select
@@ -65,22 +58,33 @@ Public Class InputBoxPage
         _miniGm.GMCmd.OnTextCommitted.Clear()
         _miniGm.GMCmd.OnTextCommitted.Bind(AddressOf OnEnterPressedInTextBox)
 
-        Dim desc = Description
-        If desc IsNot Nothing Then
-            Dim tblLog = _miniGm.LogScrollBox.GetAllChildren().OfType(Of UTextBlock).FirstOrDefault
-            tblLog?.SetText(desc.AsFText)
-        End If
+        Dim tblLog = _miniGm.LogScrollBox.GetAllChildren().OfType(Of UTextBlock).FirstOrDefault
+        tblLog?.SetText("提示：按回车或者点击确定按钮提交输入的文本。按右上角的 × 按钮取消。".AsFText)
 
         Dim contentRoot = _miniGm.RootUserWidget
         If contentRoot IsNot Nothing Then
-            Console.WriteLine($"Root user widget is {contentRoot.GetName} As {contentRoot.GetType.FullName}")
-            Dim index = 0
-            For Each curCtl In VisualTreeHelper.GetParents(contentRoot)
-                Console.WriteLine($"  Ancestor level {index } is {curCtl.GetName} As {curCtl.GetType.FullName}")
-                index += 1
-            Next
+            VisualTreeHelper.PrintVisualTree(contentRoot, "MiniGM")
         End If
     End Sub
+
+    Private Function CreateTitleTextBlock(panel As UPanelWidget) As UTextBlock
+        Dim tbl = UObject.NewObject(Of UTextBlock)(panel)
+        tbl.SetText(If(Title, String.Empty).AsFText)
+        Dim fntTitle = tbl.Font
+        fntTitle.Size *= 3
+        tbl.SetFont(fntTitle)
+        Return tbl
+    End Function
+
+    Private Function CreateDescriptionTextBlock(panel As UPanelWidget) As UTextBlock
+        Dim tbl = UObject.NewObject(Of UTextBlock)(panel)
+        tbl.SetText(If(Description, String.Empty).AsFText)
+        Dim fntTitle = tbl.Font
+        fntTitle.Size *= 2
+        tbl.SetFont(fntTitle)
+        tbl.SetAutoWrapText(True)
+        Return tbl
+    End Function
 
     Private Sub OnEnterPressedInTextBox(Text As FText, CommitMethod As ETextCommit)
         If CommitMethod <> ETextCommit.OnEnter Then Return

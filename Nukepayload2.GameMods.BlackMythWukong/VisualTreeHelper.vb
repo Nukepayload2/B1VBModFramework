@@ -8,4 +8,14 @@ Public Class VisualTreeHelper
             current = current.GetParent
         Loop
     End Function
+
+    Public Shared Sub PrintVisualTree(contentRoot As UUserWidget, partName As String)
+        Console.WriteLine($"{partName} is {contentRoot.GetName} As {contentRoot.GetType.FullName}")
+        Dim index = 1
+        For Each curCtl In GetParents(contentRoot)
+            Console.WriteLine($"  Ancestor level {index} is {curCtl.GetName} As {curCtl.GetType.FullName}")
+            index += 1
+        Next
+    End Sub
+
 End Class

@@ -141,14 +141,9 @@ Class MenuAndMessageBoxTests
     End Sub
 
     Private Async Sub BtnShowInputBox_Click(sender As Object, e As EventArgs) Handles BtnShowInputBox.Click
-        Dim result = Await InputBoxAsync("输入一些东西。在文本框里面按回车可以提交，点击确定按钮也可以提交。按 × 按钮取消。", "测试用的输入框")
+        Dim result = Await InputBoxAsync("在这个例子里面，我们使用 InputBox 函数显示一个输入框。用户在底部的文本框输入文本，然后提交。
+为了符合游戏的线程模型，这里的 InputBox 是异步版本的。你需要用 Await 运算符等待这个输入框的消失，并取得用户输入的内容。
+这个输入框只能从游戏线程弹出。如果在工作线程需要获取用户输入，则需要使用 Dispatcher。", "这是输入框的标题")
         ShowTip($"你的输入是 {result}")
-        If result IsNot Nothing Then
-            Try
-                My.Computer.Audio.PlaySystemSound(result)
-            Catch ex As Exception
-                Console.WriteLine(ex)
-            End Try
-        End If
     End Sub
 End Class
