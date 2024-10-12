@@ -16,6 +16,12 @@ Public Module B1Conversion
     End Function
 
     <Extension>
+    Public Function AsFNameNotNull(value As String) As FName
+        value.RequireNotNull(NameOf(value))
+        Return New FName(value)
+    End Function
+
+    <Extension>
     Public Sub RequireNotNull(Of T As Class)(obj As T, name As String)
         If obj Is Nothing Then Throw New ArgumentNullException(name)
     End Sub

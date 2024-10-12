@@ -30,12 +30,21 @@ Class MenuAndMessageBoxTests
     WithEvents BtnTipInformation As New MenuItem("BtnTipInformation") With {.Text = "通知消息：信息", .Tooltip = "显示通知消息，使用信息样式"}
     WithEvents BtnTipReset As New MenuItem("BtnTipReset") With {.Text = "通知消息：重置", .Tooltip = "显示通知消息，使用重置样式"}
 
+    Private ReadOnly BtnInputBox As New MenuItem("BtnInputBox") With {.Text = "输入框", .Tooltip = "关于输入框的测试"}
+    WithEvents BtnShowInputBox As New MenuItem("BtnShowInputBox") With {.Text = "显示输入框", .Tooltip = "显示一个输入框"}
+
     WithEvents MKey As InputManager.KeyOrButton
 
     Private Sub MenuAndMessageBoxTests_Load(sender As Object, e As EventArgs) Handles Me.Load
         AddMenuItems()
         MKey = My.Computer.Keyboard.Keys(EKeys.M)
         Console.WriteLine("Press Ctrl+M to show menu test.")
+    End Sub
+
+    Private Sub MKey_KeyDown(sender As Object, e As KeyEventArgs) Handles MKey.KeyDown
+        If e.Modifiers = ModifierKeys.Control Then
+            My.Window.ContextMenu.Show()
+        End If
     End Sub
 
     Private Sub AddMenuItems()
@@ -45,6 +54,7 @@ Class MenuAndMessageBoxTests
         BtnMsgBoxGm820ConfirmStyle.Items.AddRange({BtnMsgBoxGm820ConfirmOkOnly, BtnMsgBoxGm820ConfirmOkCancel})
         BtnMsgBoxShaderCompileConfirmStyle.Items.AddRange({BtnMsgBoxShaderCompileConfirmOkOnly, BtnMsgBoxShaderCompileConfirmOkCancel})
         BtnTips.Items.AddRange({BtnTipWarning, BtnTipInformation, BtnTipReset})
+        BtnInputBox.Items.AddRange({BtnShowInputBox})
 
         With My.Window.ContextMenu
             .Title = "消息框测试"
@@ -58,6 +68,7 @@ Class MenuAndMessageBoxTests
                 .Add(BtnMsgBoxShaderCompileConfirmStyle)
                 .Add(BtnMsgBoxCommErrTipsStyle)
                 .Add(BtnTips)
+                .Add(BtnInputBox)
             End With
         End With
     End Sub
@@ -129,9 +140,15 @@ Class MenuAndMessageBoxTests
         ShowTip("测试重置文本", B1MsgBoxIcons.Reset)
     End Sub
 
-    Private Sub MKey_KeyDown(sender As Object, e As KeyEventArgs) Handles MKey.KeyDown
-        If e.Modifiers = ModifierKeys.Control Then
-            My.Window.ContextMenu.Show()
+    Private Async Sub BtnShowInputBox_Click(sender As Object, e As EventArgs) Handles BtnShowInputBox.Click
+        Dim result = Await InputBoxAsync("消息", "标题")
+        ShowTip($"你的输入是 {result}")
+        If result IsNot Nothing Then
+            Try
+                My.Computer.Audio.PlaySystemSound(result)
+            Catch ex As Exception
+                Console.WriteLine(ex)
+            End Try
         End If
     End Sub
 End Class

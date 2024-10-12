@@ -52,6 +52,17 @@ Public Module B1Interaction
     Sub ShowTip(prompt As String, Optional icon As B1MsgBoxIcons = B1MsgBoxIcons.Warning)
         GSB1UIUtil.ShowGMCommTips(prompt.AsFText, icon)
     End Sub
+
+    Async Function InputBoxAsync(prompt As String, title As String) As Task(Of String)
+        Dim page As New InputBoxPage With {
+            .Description = prompt, .Title = title
+        }
+        Dim dlgResult = Await page.ShowDialogAsync
+        If dlgResult Then
+            Return page.Text
+        End If
+        Return Nothing
+    End Function
 End Module
 
 Public Enum B1MsgBoxIcons

@@ -3,33 +3,34 @@ Imports B1UI
 Imports B1UI.GSUI
 Imports GSE.GSUI
 Imports System.Reflection
+Imports UnrealEngine.Runtime
+Imports UnrealEngine.UMG
 
 Public MustInherit Class B1UIWrapper(Of TPage As GSUIPage)
 
     Protected MustOverride ReadOnly Property PageId As EnPageID
 
-    Protected ReadOnly Property Page As TPage
+    Public ReadOnly Property Page As TPage
         Get
             Dim worldContext = My.Player.Pawn
-
-            Dim value = TryCast(GSUI.UIMgr.FindUIPage(worldContext, PageId), TPage)
-            If value Is Nothing Then
-                If Not AutoShowPage Then Return value
-                Show()
-                value = TryCast(GSUI.UIMgr.FindUIPage(worldContext, PageId), TPage)
-            End If
-            Return value
-        End Get
-    End Property
-
-    Protected Overridable ReadOnly Property AutoShowPage As Boolean
-        Get
-            Return True
+            Return TryCast(GSUI.UIMgr.FindUIPage(worldContext, PageId), TPage)
         End Get
     End Property
 
     Public Sub Show()
-        BGUFunctionLibraryManaged.BGUSwitchPage(ActiveWorld, CType(PageId, EUIPageID))
+        Dim worldContext = My.Player.Pawn
+        Dim value = TryCast(GSUI.UIMgr.FindUIPage(worldContext, PageId), TPage)
+        If value Is Nothing Then
+            BGUFunctionLibraryManaged.BGUSwitchPage(ActiveWorld, CType(PageId, EUIPageID))
+        End If
+    End Sub
+
+    Public Sub Close()
+        Dim worldContext = My.Player.Pawn
+        Dim value = TryCast(GSUI.UIMgr.FindUIPage(worldContext, PageId), TPage)
+        If value IsNot Nothing Then
+            GenAGPage.FadeOutPage(PageId, "OnClickCloseBtn")
+        End If
     End Sub
 
     Protected Function TryGetField(Of TResult As Class)(fieldName As String) As TResult
@@ -50,6 +51,27 @@ Public MustInherit Class B1UIWrapper(Of TPage As GSUIPage)
             Return DirectCast(result, TResult)
         End If
         Return Nothing
+    End Function
+
+    Public ReadOnly Property OwnerPage As GSUIPage
+        Get
+            Return Page?.GetOwnerPage
+        End Get
+    End Property
+
+    Public ReadOnly Property RootUserWidget As UUserWidget
+        Get
+            Return Page?.GetRootUserWidget
+        End Get
+    End Property
+
+    Public Function FindControl(Of T As UWidget)(name As String) As T
+        Return FindControl(Of T)(RootUserWidget, name)
+    End Function
+
+    Public Function FindControl(Of T As UWidget)(lookIn As UUserWidget, name As String) As T
+        name.RequireNotNull(NameOf(name))
+        Return TryCast(UGSE_UMGFuncLib.GetWidgetFromName(lookIn, New FName(name)), T)
     End Function
 
 End Class

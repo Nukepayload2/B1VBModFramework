@@ -6,6 +6,8 @@ Public Class MenuFlyout
     Private ReadOnly _shrineMain As New B1ShrineMain
 
     Public Sub Show()
+        _shrineMain.Show()
+
         If Title IsNot Nothing Then
             _shrineMain.TxtMainName?.SetText(Title.AsFText)
         End If

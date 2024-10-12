@@ -224,4 +224,10 @@ Public Class B1MiniGM
         End Get
     End Property
 
+    Public ReadOnly Property BtnRunCmd As GSButton
+        Get
+            Return FindControl(Of GSButton)(NameOf(BtnRunCmd))
+        End Get
+    End Property
+
 End Class
