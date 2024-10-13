@@ -13,6 +13,7 @@ Public Class InputBoxPage
 
     Private WithEvents SubmitButton As GSButton
     Private WithEvents CloseButton As GSButton
+    Private _miniGmComm As UBorder
 
     Public Sub Show()
         _miniGm.Show()
@@ -27,45 +28,37 @@ Public Class InputBoxPage
         For Each childPage In children
             Select Case childPage?.GetType
                 Case GetType(B1UI.GSUI.VIMiniGMPanel)
-                    With DirectCast(childPage, B1UI.GSUI.VIMiniGMPanel)
-                        .ShowIn()
-                        Dim widget = .GetRootUserWidget
-                        For Each panel In VisualTreeHelper.GetParents(widget)
-                            Select Case panel.GetName
-                                Case "MainCon"
-                                    Dim canvasPanel = TryCast(panel, UCanvasPanel)
-                                    If canvasPanel IsNot Nothing Then
-                                        Dim titleBox = CreateTitleTextBlock(panel)
-                                        canvasPanel.AddChildToCanvas(titleBox).SetOffsets(
-                                            New FMargin With {.Left = 4, .Top = 4})
-                                    End If
-                                Case "CommCon"
-                                    Dim overlay = TryCast(panel, UOverlay)
-                                    If overlay IsNot Nothing Then
-                                        Dim descBox = CreateDescriptionTextBlock(panel)
-                                        overlay.AddChildToOverlay(descBox).SetPadding(
-                                            New FMargin With {.Left = 4, .Top = 4, .Bottom = 4, .Right = 4})
-                                    End If
-                            End Select
-                        Next
-                    End With
+                    DirectCast(childPage, B1UI.GSUI.VIMiniGMPanel).ShowOut()
                 Case GetType(B1UI.GSUI.VIMiniGMTab)
                     DirectCast(childPage, B1UI.GSUI.VIMiniGMTab).SetVisable(False)
                 Case GetType(B1UI.GSUI.VIMiniGMQuickPanel)
                     DirectCast(childPage, B1UI.GSUI.VIMiniGMQuickPanel).ShowOut()
             End Select
         Next
+
         _miniGm.GMCmd.OnTextCommitted.Clear()
         _miniGm.GMCmd.OnTextCommitted.Bind(AddressOf OnEnterPressedInTextBox)
+        Dim centerCon = TryCast(_miniGm.CenterCon, UCanvasPanel)
+        _miniGmComm = Nothing
+        If centerCon IsNot Nothing Then
+            Dim stkContent = CreateVerticalStackPanel(centerCon)
+            stkContent.AddChildToVerticalBox(CreateTitleTextBlock(centerCon))
+            stkContent.AddChildToVerticalBox(CreateDescriptionTextBlock(centerCon))
+            centerCon.AddChildToCanvas(stkContent).SetPosition(New FVector2D(12, 12))
+            Dim comm = VisualTreeHelper.GetDescendants(centerCon).OfType(Of UBorder).FirstOrDefault
+            If comm?.GetName = "Comm" Then
+                _miniGmComm = comm
+                comm.SetVisibility(ESlateVisibility.Collapsed)
+            End If
+        End If
 
         Dim tblLog = _miniGm.LogScrollBox.GetAllChildren().OfType(Of UTextBlock).FirstOrDefault
         tblLog?.SetText("提示：按回车或者点击确定按钮提交输入的文本。按右上角的 × 按钮取消。".AsFText)
-
-        Dim contentRoot = _miniGm.RootUserWidget
-        If contentRoot IsNot Nothing Then
-            VisualTreeHelper.PrintVisualTree(contentRoot, "MiniGM")
-        End If
     End Sub
+
+    Private Function CreateVerticalStackPanel(panel As UPanelWidget) As UVerticalBox
+        Return UObject.NewObject(Of UVerticalBox)(panel)
+    End Function
 
     Private Function CreateTitleTextBlock(panel As UPanelWidget) As UTextBlock
         Dim tbl = UObject.NewObject(Of UTextBlock)(panel)
@@ -82,7 +75,8 @@ Public Class InputBoxPage
         Dim fntTitle = tbl.Font
         fntTitle.Size *= 2
         tbl.SetFont(fntTitle)
-        tbl.SetAutoWrapText(True)
+        ' 打开自动换行会导致每个词都换行。设置 HorizontalAlignment=Fill 又没反应。
+        ' tbl.SetAutoWrapText(True)
         Return tbl
     End Function
 
@@ -110,11 +104,13 @@ Public Class InputBoxPage
     End Sub
 
     Private Sub Commit()
+        _miniGmComm?.SetVisibility(ESlateVisibility.Visible)
         _miniGm.Close()
         DialogResultSource.SetResult(True)
     End Sub
 
     Private Sub CloseButton_OnGSButtonClicked(GSID As Integer) Handles CloseButton.OnGSButtonClicked
+        _miniGmComm?.SetVisibility(ESlateVisibility.Visible)
         DialogResultSource.SetResult(False)
     End Sub
 End Class

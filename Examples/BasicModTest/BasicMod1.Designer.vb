@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports System.Runtime.ExceptionServices
 Imports CSharpModBase
 
 Partial Class BasicMod1
@@ -21,6 +22,15 @@ Partial Class BasicMod1
     Event Unload As EventHandler
 
     Public ReadOnly Property Components As New List(Of ModComponentBase)
+
+    Shared Sub New()
+        ' 有时候因为异常被处理了而看不到错误消息
+        AddHandler AppDomain.CurrentDomain.FirstChanceException, AddressOf OnFirstChangeException
+    End Sub
+
+    Private Shared Sub OnFirstChangeException(sender As Object, e As FirstChanceExceptionEventArgs)
+        Console.WriteLine($"First chance exception: {e.Exception}")
+    End Sub
 
     Sub New()
         My.Mod = Me
