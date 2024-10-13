@@ -11,7 +11,7 @@
     <MyType>None</MyType>
     <NoWarn></NoWarn>
     <VBRuntime>Embed</VBRuntime>
-    <Version>1.0.0-alpha2</Version>
+    <Version>1.0.0-alpha3</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="$(B1CSharpLoaderPath)CSharpModBase\CSharpModBase.csproj" />
