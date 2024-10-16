@@ -3,7 +3,7 @@ Imports UnrealEngine.Runtime
 Imports UnrealEngine.SlateCore
 Imports UnrealEngine.UMG
 
-Public Class InputBoxPage
+Friend Class InputBoxPage
     Private ReadOnly _miniGm As New B1MiniGM
 
     Public Property Title As String

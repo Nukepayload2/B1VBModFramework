@@ -1,7 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports b1
-Imports CSharpModBase.Input
-Imports UnrealEngine.Engine
 Imports UnrealEngine.InputCore
 
 Public Interface IMouseDevice
@@ -195,55 +193,3 @@ Public Class InputManager
     End Class
 
 End Class
-
-Public Class KeyEventArgs
-    Inherits EventArgs
-
-    Public Sub New(key As EKeys, modifiers As ModifierKeys, world As UWorld, player As BGP_PlayerControllerB1)
-        Me.Key = key
-        Me.Modifiers = modifiers
-        Me.World = world
-        Me.Player = player
-    End Sub
-
-    Public ReadOnly Property Key As EKeys
-    Public ReadOnly Property Modifiers As ModifierKeys
-    Public ReadOnly Property World As UWorld
-    Public ReadOnly Property Player As BGP_PlayerControllerB1
-End Class
-
-<Flags>
-Public Enum ModifierKeys
-    None = 0
-    Alt = 1
-    Control = 2
-    Shift = 4
-    Windows = 8
-End Enum
-
-Public Module ModifierKeysHelper
-    <Extension>
-    Sub AddFlag(ByRef currentFlag As ModifierKeys, newFlag As ModifierKeys)
-        currentFlag = currentFlag Or newFlag
-    End Sub
-
-    <Extension>
-    Function WithFlag(currentFlag As ModifierKeys, newFlag As ModifierKeys) As ModifierKeys
-        Return currentFlag Or newFlag
-    End Function
-
-    <Extension>
-    Sub RemoveFlag(ByRef currentFlag As ModifierKeys, flagToRemove As ModifierKeys)
-        currentFlag = currentFlag And Not flagToRemove
-    End Sub
-
-    <Extension>
-    Function WithoutFlag(currentFlag As ModifierKeys, flagToRemove As ModifierKeys) As ModifierKeys
-        Return currentFlag And Not flagToRemove
-    End Function
-
-    <Extension>
-    Function HasFlag(currentFlag As ModifierKeys, testFlag As ModifierKeys) As Boolean
-        Return (currentFlag And testFlag) = testFlag
-    End Function
-End Module
