@@ -1,12 +1,13 @@
-﻿Imports System.Net
-Imports System.Reflection
+﻿Imports System.Net.Http
+Imports System.Text
 Imports b1
 Imports BtlShare
+Imports Newtonsoft.Json
 
 Class AITest
     Inherits ModComponentBase
 
-    ' 实验失败，这个功能无法启用，因为发出 HTTP 请求会产生运行时异常。
+    Private WithEvents AKey As InputManager.KeyOrButton
 
     Private Async Sub PrintPlayerInfoAI()
         Dim player = My.Player.Pawn
@@ -28,97 +29,60 @@ Class AITest
 
         ShowTip("AI 正在总结你的状态...")
 
-        Try
-            Await MsgBoxAsync(String.Join(vbCrLf,
-                      From item In GetType(HttpWebRequest).GetConstructors(BindingFlags.NonPublic)
-                      Select String.Join(",", From p In item.GetParameters Select p.ParameterType.FullName)))
-            WebRequest.RegisterPrefix("http", DirectCast(Activator.CreateInstance(GetType(HttpWebRequest).Assembly.GetType("System.Net.HttpRequestCreator")), IWebRequestCreate))
-            Dim test1 = WebRequest.CreateHttp("http://localhost:11434/api/chat")
-            ShowTip("WebRequest.CreateHttp OK...")
-        Catch ex As Exception
-            ShowTip("WebRequest.CreateHttp ERR...")
-            Console.WriteLine(ex)
-            Return
-        End Try
-
-        Dim aiResponse = Await LegacyAskAIAsync("qwen2:latest", "http://localhost:11434/api/chat",
+        Dim aiResponse = Await AskAIAsync("qwen2:latest", "http://localhost:11434/api/chat",
                          "你是游戏助手，你负责总结玩家状态值的情况。状态值的格式为：名称 当前数值/最大值。你需要对每个状态值做出总结。",
                          userMessage)
 
-        Await MsgBoxAsync(aiResponse,, "玩家状态 (AI 评价)")
+        Console.WriteLine(aiResponse)
+        ' 消息框太小了，放不下这么多字
+        Await InputBoxAsync(aiResponse, "玩家状态 (AI 评价)")
     End Sub
 
+    Private Sub AITest_Load(sender As Object, e As EventArgs) Handles Me.Load
+        AKey = My.Computer.Keyboard.Keys(UnrealEngine.InputCore.EKeys.A)
+        Console.WriteLine("Press Ctrl+A to summarize status with qwen2 on local ollama server")
+    End Sub
+
+    Private Sub AKey_KeyDown(sender As Object, e As KeyEventArgs) Handles AKey.KeyDown
+        If e.Modifiers.HasFlag(ModifierKeys.Control) Then
+            PrintPlayerInfoAI()
+        End If
+    End Sub
 End Class
 
 Public Module AIHelper
 
     Async Function AskAIAsync(model As String, requestUrl As String, systemMessage As String, userMessage As String) As Task(Of String)
+        Dim request As New With {
+            model,
+            .messages = {
+                New With {
+                    .role = "system",
+                    .content = systemMessage
+                },
+                New With {
+                    .role = "user",
+                    .content = userMessage
+                }
+            },
+            .stream = False
+        }
 
-        'Dim httpClient As New HttpClient(New HttpClientHandler With {.UseProxy = False})
+        Dim json = JsonConvert.SerializeObject(request)
+        Dim content As New StringContent(json, Encoding.UTF8, "application/json")
 
-        'Dim request As New With {
-        '    model,
-        '    .messages = {
-        '        New With {
-        '            .role = "system",
-        '            .content = systemMessage
-        '        },
-        '        New With {
-        '            .role = "user",
-        '            .content = userMessage
-        '        }
-        '    },
-        '    .stream = False
-        '}
+        Dim response As HttpResponseMessage = Await My.Computer.Network.PostAsync(requestUrl, content)
 
-        'Dim json = JsonConvert.SerializeObject(request)
-        'Dim content As New StringContent(json, Encoding.UTF8, "application/json")
+        If response.IsSuccessStatusCode Then
+            Dim responseBody = Await response.Content.ReadAsStringAsync()
+            Dim responseObject = JsonConvert.DeserializeObject(Of ChatResponse)(responseBody)
 
-        'Dim response = Await httpClient.PostAsync(requestUrl, content)
-
-        'If response.IsSuccessStatusCode Then
-        '    Dim responseBody = Await response.Content.ReadAsStringAsync()
-        '    Dim responseObject = JsonConvert.DeserializeObject(Of ChatResponse)(responseBody)
-
-        '    Return responseObject.message.content
-        'Else
-        '    Return "Error: " & response.StatusCode
-        'End If
+            Return responseObject.message.content
+        Else
+            Return "Error: " & response.StatusCode
+        End If
     End Function
 
-    Async Function LegacyAskAIAsync(model As String, requestUrl As String, systemMessage As String, userMessage As String) As Task(Of String)
-        'Dim webClient As New WebClient()
-
-        'Dim request As New With {
-        '    model,
-        '    .messages = {
-        '        New With {
-        '            .role = "system",
-        '            .content = systemMessage
-        '        },
-        '        New With {
-        '            .role = "user",
-        '            .content = userMessage
-        '        }
-        '    },
-        '    .stream = False
-        '}
-
-        'Dim json = JsonConvert.SerializeObject(request)
-
-        'webClient.Headers.Add("Content-Type", "application/json")
-        'Dim responseBytes = Await webClient.UploadDataTaskAsync(New Uri(requestUrl, UriKind.Absolute), "POST", Encoding.UTF8.GetBytes(json))
-
-        'Dim response = Encoding.UTF8.GetString(responseBytes)
-
-        'If response.StartsWith("{"c) Then
-        '    Dim responseObject = JsonConvert.DeserializeObject(Of ChatResponse)(response)
-
-        '    Return responseObject.message.content
-        'Else
-        '    Return "Error: " & response
-        'End If
-    End Function
 End Module
 
 Public Class ChatResponse

@@ -33,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ILMerge.Fody" Version="1.24.0" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Nukepayload2.GameMods.BlackMythWukong\Nukepayload2.GameMods.BlackMythWukong.vbproj" />
@@ -46,5 +47,6 @@
   </ItemGroup>
   <Target AfterTargets="PostBuildEvent" Name="CopyModArtifacts">
     <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
+    <Copy SourceFiles="System.Net.Http.WinHttpHandler.dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
   </Target>
 </Project>

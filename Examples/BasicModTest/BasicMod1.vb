@@ -7,6 +7,7 @@
             .Add(New StatusDisplay)
             .Add(New MenuAndMessageBoxTests)
             .Add(New GamepadCyberwaresTest)
+            .Add(New AITest)
         End With
     End Sub
 
