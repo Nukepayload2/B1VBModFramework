@@ -145,4 +145,8 @@ Public Class GamePlayDispatcher
         ThrowForMessagesUnavailable()
         _messages.Enqueue(act)
     End Sub
+
+    Public Function CheckAccess() As Boolean
+        Return FThreading.IsInGameThread
+    End Function
 End Class
