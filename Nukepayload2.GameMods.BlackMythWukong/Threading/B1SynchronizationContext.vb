@@ -14,10 +14,10 @@ Public Class B1SynchronizationContext
     End Sub
 
     Public Overrides Sub Post(d As SendOrPostCallback, state As Object)
-        GamePlayDispatcher.Instance.BeginInvoke(Sub() MyBase.Post(d, state))
+        GamePlayDispatcher.Instance.BeginInvoke(Sub() d(state))
     End Sub
 
     Public Overrides Sub Send(d As SendOrPostCallback, state As Object)
-        GamePlayDispatcher.Instance.Invoke(Sub() MyBase.Send(d, state))
+        GamePlayDispatcher.Instance.Invoke(Sub() d(state))
     End Sub
 End Class
