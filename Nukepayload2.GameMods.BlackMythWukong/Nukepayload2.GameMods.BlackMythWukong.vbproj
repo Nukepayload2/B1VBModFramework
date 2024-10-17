@@ -31,6 +31,9 @@
     <GameDll Include="GSE.ProtobufDB" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.Net.Http.WinHttpHandler" Version="8.0.2" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="@(GameDll)">
       <HintPath>$(GameDllDir)%(Identity).dll</HintPath>

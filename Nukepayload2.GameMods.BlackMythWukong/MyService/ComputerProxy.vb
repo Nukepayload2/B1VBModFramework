@@ -36,6 +36,8 @@
         End Property
 
         Public ReadOnly Property Audio As New AudioProxy
+
+        Public ReadOnly Property Network As New Network
     End Class
 
 End Namespace
