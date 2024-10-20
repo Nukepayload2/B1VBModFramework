@@ -47,6 +47,6 @@
   </ItemGroup>
   <Target AfterTargets="PostBuildEvent" Name="CopyModArtifacts">
     <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
-    <Copy SourceFiles="System.Net.Http.WinHttpHandler.dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
+    <Copy SourceFiles="$(TargetDir)System.Net.Http.WinHttpHandler.dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
   </Target>
 </Project>
