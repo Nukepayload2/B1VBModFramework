@@ -16,7 +16,7 @@
 - My 扩展
     - My.World 访问相关全局对象，以及加载资产文件
     - My.Player 访问相关全局对象、事件集合、玩家的数值状态、带数字编号的增益和负面状态，以及调试用的特殊状态。
-    - My.Computer 处理键盘、鼠标、手柄的按键输入，以及播放游戏内置的声音。
+    - My.Computer 处理键盘、鼠标、手柄的按键输入、访问网络，以及播放游戏内置的声音。
     - My.Window 处理游戏窗口的状态和导航，以及在窗口上弹出菜单。
 - VB 的经典交互 API
     - MsgBox 消息框
@@ -25,13 +25,25 @@
 - Windows Forms 的初始化逻辑
     - InitializeComponents
     - Load 和 Unload 事件
-- WPF 的多线程 API
+- WPF 的 API
     - Dispatcher
         - BeginInvoke
         - Invoke
         - 对于游戏主线程，还支持 InvokeAsync
-    - DispatcherTimer
-    - 游戏主线程上的同步上下文
+    - DispatcherTimer: 将定时器运行在指定 Dispatcher
+    - 游戏主线程上的同步上下文，可以在游戏线程上用了 `Await` 之后还能回到原来的线程上。
+    - VisualTreeHelper: 获取子元素和上级元素
+
+## 计划中的功能
+越是不容易被游戏更新影响的功能，越优先处理。
+
+- [P1] 设计时 AI 功能：API 速查（仅提供通用的 C#/VB API 查找工具，游戏的代码你自己想办法）
+- [P1] 运行时 AI 功能: 调用大语言模型
+- 项目模板 (dotnet new)
+- 游戏内覆盖窗口
+- 弱引用事件，能够自动取消订阅已回收对象的事件处理程序
+- 封装游戏的 UI 控件，尽量使其符合 XAML 标准
+- 更多全局事件：依赖 API Hook 实现
 
 ## 如何编译库
 - 克隆 [B1CSharpLoader](https://github.com/czastack/B1CSharpLoader)
