@@ -11,9 +11,11 @@ Class GamepadCyberwaresTest
     WithEvents CyberwareLevelTimer As New DispatcherTimer
 
     Private Sub GamepadCyberwaresTest_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Console.WriteLine("Press left+right thumb sticks to activate cyberwares")
+        Console.WriteLine("Press left+right thumb sticks or Ctrl+C to activate cyberwares")
         LeftStick = My.Computer.Gamepad.Buttons(EKeys.Gamepad_LeftThumbstick)
         RightStick = My.Computer.Gamepad.Buttons(EKeys.Gamepad_RightThumbstick)
+
+        CKey = My.Computer.Keyboard.Keys(EKeys.C)
     End Sub
 
     Private Class CyberwareContext
@@ -320,7 +322,7 @@ Class GamepadCyberwaresTest
         New Cyberware1活血泵, New Cyberware2狂暴, New Cyberware3克伦齐科夫, New Cyberware4量子调谐
     }
 
-    Private Sub CyberwareWhenLeftRightStickPressed(e As KeyEventArgs)
+    Private Sub CyberwareActivated(e As KeyEventArgs)
         HardResetWhenPlayerDead()
 
         Dim player = e.Player
@@ -394,7 +396,7 @@ Class GamepadCyberwaresTest
 
     WithEvents LeftStick As InputManager.KeyOrButton
     WithEvents RightStick As InputManager.KeyOrButton
-
+    WithEvents CKey As InputManager.KeyOrButton
     Private _leftStickPressed As Boolean
     Private _rightStickPressed As Boolean
     Private _tipShown As Boolean
@@ -402,7 +404,7 @@ Class GamepadCyberwaresTest
     Private Sub LeftStick_KeyDown(sender As Object, e As KeyEventArgs) Handles LeftStick.KeyDown
         _leftStickPressed = True
         If _rightStickPressed Then
-            CyberwareWhenLeftRightStickPressed(e)
+            CyberwareActivated(e)
         ElseIf Not _tipShown Then
             ShowTip("你按下了左摇杆，同时按右摇杆使用秘技")
             _tipShown = True
@@ -417,7 +419,7 @@ Class GamepadCyberwaresTest
     Private Sub RightStick_KeyDown(sender As Object, e As KeyEventArgs) Handles RightStick.KeyDown
         _rightStickPressed = True
         If _leftStickPressed Then
-            CyberwareWhenLeftRightStickPressed(e)
+            CyberwareActivated(e)
         ElseIf Not _tipShown Then
             ShowTip("你按下了右摇杆，同时按左摇杆使用秘技")
             _tipShown = True
@@ -429,6 +431,11 @@ Class GamepadCyberwaresTest
         Console.WriteLine("Right thumb stick up")
     End Sub
 
+    Private Sub CKey_KeyDown(sender As Object, e As KeyEventArgs) Handles CKey.KeyDown
+        If e.Modifiers = (ModifierKeys.Control Or ModifierKeys.Shift) Then
+            CyberwareActivated(e)
+        End If
+    End Sub
 End Class
 
 ' 原本的设想：
