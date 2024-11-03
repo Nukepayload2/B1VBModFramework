@@ -35,6 +35,16 @@ Namespace My
         ''' Gets the game window.
         ''' </summary>
         Public ReadOnly Property Window As New WindowProxy
+        ''' <summary>
+        ''' 获取游戏应用程序的信息。<br/>
+        ''' Gets the game app info.
+        ''' </summary>
+        Public ReadOnly Property Application As New ModifiedApplicationBase
+        ''' <summary>
+        ''' 用于向指定的 TraceListeners 输出日志。<br/>
+        ''' Enables logging to configured TraceListeners.
+        ''' </summary>
+        Public ReadOnly Property Log As New Logging.Log
     End Module
 
 End Namespace
