@@ -13,6 +13,10 @@ Namespace Logging
         LocalUserApplicationDirectory
         CommonApplicationDirectory
         ExecutableDirectory
+        ''' <summary>
+        ''' Write to the MOD directory. It only takes effect if you have embedded this assembly into your assembly.
+        ''' </summary>
+        ModDirectory
         Custom
     End Enum
 

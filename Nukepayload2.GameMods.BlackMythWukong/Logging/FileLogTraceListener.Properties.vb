@@ -26,7 +26,7 @@ Namespace Logging
         ' Note: Properties that use _propertiesSet to track whether or not
         '       they've been set should always be set through the property setter and not
         '       by directly changing the corresponding private field.
-        Private ReadOnly _propertiesSet As New BitArray(PROPERTY_COUNT, False)
+        Private ReadOnly _propertiesSet(PROPERTY_COUNT - 1) As Boolean
 
     End Class
 End Namespace

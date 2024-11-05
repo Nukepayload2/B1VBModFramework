@@ -28,6 +28,11 @@ Namespace My
         ''' </summary>
         Public ReadOnly Property Application As New ModifiedApplicationBase
         ''' <summary>
+        ''' 获取游戏模组的信息。<br/>
+        ''' Gets the game MOD info.
+        ''' </summary>
+        Public ReadOnly Property [Mod] As New ModBase
+        ''' <summary>
         ''' 用于向指定的 TraceListeners 输出日志。<br/>
         ''' Enables logging to configured TraceListeners.
         ''' </summary>

@@ -11,7 +11,7 @@ Class GamepadCyberwaresTest
     WithEvents CyberwareLevelTimer As New DispatcherTimer
 
     Private Sub GamepadCyberwaresTest_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Console.WriteLine("Press left+right thumb sticks or Ctrl+C to activate cyberwares")
+        My.Log.WriteEntry("Press left+right thumb sticks or Ctrl+C to activate cyberwares")
         LeftStick = My.Computer.Gamepad.Buttons(EKeys.Gamepad_LeftThumbstick)
         RightStick = My.Computer.Gamepad.Buttons(EKeys.Gamepad_RightThumbstick)
 
@@ -413,7 +413,7 @@ Class GamepadCyberwaresTest
 
     Private Sub LeftStick_KeyUp(sender As Object, e As KeyEventArgs) Handles LeftStick.KeyUp
         _leftStickPressed = False
-        Console.WriteLine("Left thumb stick up")
+        My.Log.WriteEntry("Left thumb stick up")
     End Sub
 
     Private Sub RightStick_KeyDown(sender As Object, e As KeyEventArgs) Handles RightStick.KeyDown
@@ -428,7 +428,7 @@ Class GamepadCyberwaresTest
 
     Private Sub RightStick_KeyUp(sender As Object, e As KeyEventArgs) Handles RightStick.KeyUp
         _rightStickPressed = False
-        Console.WriteLine("Right thumb stick up")
+        My.Log.WriteEntry("Right thumb stick up")
     End Sub
 
     Private Sub CKey_KeyDown(sender As Object, e As KeyEventArgs) Handles CKey.KeyDown

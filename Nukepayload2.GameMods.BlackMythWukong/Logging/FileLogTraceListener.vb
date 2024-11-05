@@ -4,6 +4,7 @@
 Imports System.ComponentModel
 Imports System.Globalization
 Imports System.IO
+Imports System.Reflection
 Imports System.Text
 
 Namespace Logging
@@ -26,7 +27,7 @@ Namespace Logging
         Private _autoFlush As Boolean
 
         ' Stores the name of the file minus the path, date stamp, and file number
-        Private _baseFileName As String = Path.GetFileNameWithoutExtension(My.Application.ExecutablePath)
+        Private _baseFileName As String = My.Mod.Name
 
         ' Directory to be used for the log file if Location is set to Custom
         Private _customLocation As String = My.Application.UserAppDataPath
@@ -119,17 +120,19 @@ Namespace Logging
         Private ReadOnly Property LogFileName() As String
             Get
                 Dim basePath As String
-
                 ' Get the directory
                 Select Case Location
                     Case LogFileLocation.CommonApplicationDirectory
                         basePath = My.Application.CommonAppDataPath
                     Case LogFileLocation.ExecutableDirectory
-                        basePath = Path.GetDirectoryName(My.Application.ExecutablePath)
+                        basePath = My.Application.BaseDirectory
                     Case LogFileLocation.LocalUserApplicationDirectory
                         basePath = My.Application.UserAppDataPath
                     Case LogFileLocation.TempDirectory
                         basePath = Path.GetTempPath()
+                    Case LogFileLocation.ModDirectory
+                        Dim asmTitle = GetType(FileLogTraceListener).Assembly.GetCustomAttribute(Of AssemblyTitleAttribute)?.Title
+                        basePath = Path.Combine(My.Application.BaseDirectory, "CSharpLoader", "Mods", asmTitle)
                     Case LogFileLocation.Custom
                         If String.IsNullOrEmpty(CustomLocation) Then
                             basePath = My.Application.UserAppDataPath

@@ -7,7 +7,7 @@ Class StatusDisplay
 
     Private Sub StatusDisplay_Load(sender As Object, e As EventArgs) Handles Me.Load
         AddHandler My.Computer.Keyboard.Keys(EKeys.I).KeyDown, AddressOf OnIKeyDown
-        Console.WriteLine("Press Ctrl+I to show player status.")
+        My.Log.WriteEntry("Press Ctrl+I to show player status.")
     End Sub
 
     Private Sub OnIKeyDown(sender As Object, e As KeyEventArgs)
@@ -19,7 +19,7 @@ Class StatusDisplay
     Private Async Sub PrintPlayerInfo()
         Dim player = My.Player.Status
         If player Is Nothing Then
-            Console.WriteLine("Player not found")
+            My.Log.WriteEntry("Player not found")
             Return
         End If
 

@@ -1,27 +1,8 @@
-﻿Imports System.Reflection
-Imports System.Runtime.ExceptionServices
-Imports CSharpModBase
+﻿Imports System.Runtime.ExceptionServices
+Imports Nukepayload2.GameMods.BlackMythWukong.Logging
 
 Partial Class BasicMod1
-    Implements ICSharpMod
-
-    ' 这俩属性是 MSBuild 指定的而不是写代码里面的，不然 CI 构建麻烦。
-    Public ReadOnly Property Name As String Implements ICSharpMod.Name
-        Get
-            Return GetType(BasicMod1).Assembly.GetCustomAttribute(Of AssemblyTitleAttribute)?.Title
-        End Get
-    End Property
-
-    Public ReadOnly Property Version As String Implements ICSharpMod.Version
-        Get
-            Return GetType(BasicMod1).Assembly.GetCustomAttribute(Of AssemblyInformationalVersionAttribute)?.InformationalVersion
-        End Get
-    End Property
-
-    Event Load As EventHandler
-    Event Unload As EventHandler
-
-    Public ReadOnly Property Components As New List(Of ModComponentBase)
+    Inherits ModBase
 
     Shared Sub New()
         ' 有时候因为异常被处理了而看不到错误消息
@@ -41,44 +22,22 @@ Partial Class BasicMod1
         ' 在另一个文件里面，用于初始化组件。这个过程可以是源生成器写的，也可以是人写的。
     End Sub
 
-    Public Sub Init() Implements ICSharpMod.Init
+    Protected Overrides Sub OnLoad()
+        With My.Log.TraceSource.Listeners
+            .Clear()
+            .Add(New FileLogTraceListener With {.Location = LogFileLocation.ModDirectory})
+            .Add(New ConsoleTraceListener)
+        End With
         GamePlayDispatcher.Register()
         B1SynchronizationContext.TryInitForGameThread()
         My.Computer.InputManager.StartListening()
-        RaiseEvent Load(Me, EventArgs.Empty)
+        MyBase.OnLoad()
     End Sub
 
-    Public Sub DeInit() Implements ICSharpMod.DeInit
-        RaiseEvent Unload(Me, EventArgs.Empty)
+    Protected Overrides Sub OnUnload()
+        MyBase.OnUnload()
         My.Computer.InputManager.StopListening()
+        My.Log.TraceSource.Close()
     End Sub
-
-End Class
-
-MustInherit Class ModComponentBase
-
-    Custom Event Load As EventHandler
-        AddHandler(value As EventHandler)
-            AddHandler My.Mod.Load, value
-        End AddHandler
-        RemoveHandler(value As EventHandler)
-            RemoveHandler My.Mod.Load, value
-        End RemoveHandler
-        RaiseEvent(sender As Object, e As EventArgs)
-            Throw New NotSupportedException
-        End RaiseEvent
-    End Event
-
-    Custom Event Unload As EventHandler
-        AddHandler(value As EventHandler)
-            AddHandler My.Mod.Unload, value
-        End AddHandler
-        RemoveHandler(value As EventHandler)
-            RemoveHandler My.Mod.Unload, value
-        End RemoveHandler
-        RaiseEvent(sender As Object, e As EventArgs)
-            Throw New NotSupportedException
-        End RaiseEvent
-    End Event
 
 End Class

@@ -1,8 +1,10 @@
 ﻿Imports System.Net.Http
 Imports System.Text
+Imports System.Threading
 Imports b1
 Imports BtlShare
 Imports Newtonsoft.Json
+Imports STUN
 
 Class AITest
     Inherits ModComponentBase
@@ -12,7 +14,7 @@ Class AITest
     Private Async Sub PrintPlayerInfoAI()
         Dim player = My.Player.Pawn
         If player Is Nothing Then
-            Console.WriteLine("Player not found")
+            My.Log.WriteEntry("Player not found")
             Return
         End If
 
@@ -29,18 +31,18 @@ Class AITest
 
         ShowTip("AI 正在总结你的状态...")
 
-        Dim aiResponse = Await AskAIAsync("qwen2:latest", "http://localhost:11434/api/chat",
+        Dim aiResponse = Await AskLocalAIAsync("qwen2:latest", "http://localhost:11434/api/chat",
                          "你是游戏助手，你负责总结玩家状态值的情况。状态值的格式为：名称 当前数值/最大值。你需要对每个状态值做出总结。",
                          userMessage)
 
-        Console.WriteLine(aiResponse)
+        My.Log.WriteEntry(aiResponse)
         ' 消息框太小了，放不下这么多字
         Await InputBoxAsync(aiResponse, "玩家状态 (AI 评价)")
     End Sub
 
     Private Sub AITest_Load(sender As Object, e As EventArgs) Handles Me.Load
         AKey = My.Computer.Keyboard.Keys(UnrealEngine.InputCore.EKeys.A)
-        Console.WriteLine("Press Ctrl+A to summarize status with qwen2 on local ollama server")
+        My.Log.WriteEntry("Press Ctrl+A to summarize status with qwen2 on local ollama server")
     End Sub
 
     Private Sub AKey_KeyDown(sender As Object, e As KeyEventArgs) Handles AKey.KeyDown
@@ -52,7 +54,7 @@ End Class
 
 Public Module AIHelper
 
-    Async Function AskAIAsync(model As String, requestUrl As String, systemMessage As String, userMessage As String) As Task(Of String)
+    Async Function AskLocalAIAsync(model As String, requestUrl As String, systemMessage As String, userMessage As String) As Task(Of String)
         Dim request As New With {
             model,
             .messages = {

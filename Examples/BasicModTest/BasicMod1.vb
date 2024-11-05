@@ -12,7 +12,7 @@
     End Sub
 
     Private Sub BasicMod1_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Console.WriteLine($"Loaded components {String.Join(", ",
+        My.Log.WriteEntry($"Loaded components {String.Join(", ",
              From comp In Components Select comp.GetType.FullName)}")
     End Sub
 
