@@ -25,10 +25,29 @@ Public Class ModBase
         End Get
     End Property
 
+    ''' <summary>
+    ''' 在模组启动阶段，初始化底层的服务。先于 <see cref="Load"/> 事件发生。
+    ''' </summary>
+    Public Event Initialized As EventHandler
+    ''' <summary>
+    ''' 在模组启动阶段，初始化每个部件中的游戏逻辑。在 <see cref="Initialized"/> 事件之后发生。
+    ''' </summary>
     Public Event Load As EventHandler
+    ''' <summary>
+    ''' 在模组正常退出时发生此事件。不保证每次退出游戏都会执行它。
+    ''' </summary>
     Public Event Unload As EventHandler
 
-    Protected Overridable Sub OnLoad() Implements ICSharpMod.Init
+    Protected Sub OnInit() Implements ICSharpMod.Init
+        OnInitialized()
+        OnLoad()
+    End Sub
+
+    Protected Overridable Sub OnInitialized()
+        RaiseEvent Initialized(Me, EventArgs.Empty)
+    End Sub
+
+    Protected Overridable Sub OnLoad()
         RaiseEvent Load(Me, EventArgs.Empty)
     End Sub
 

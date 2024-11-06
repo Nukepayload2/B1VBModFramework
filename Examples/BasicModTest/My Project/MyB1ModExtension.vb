@@ -14,37 +14,72 @@ Namespace My
         ''' 当前模组的实例。<br/>
         ''' Gets instance of the current MOD.
         ''' </summary>
+        ''' <value>
+        ''' 值在模组实例创建之前为空。<br/>
+        ''' The value is <see langword="Nothing"/> until the instance is created.
+        ''' </value>
         Public Property [Mod] As BasicMod1
+            Get
+                Return DirectCast(Nukepayload2.GameMods.BlackMythWukong.My.Mod, BasicMod1)
+            End Get
+            Set(value As BasicMod1)
+                Nukepayload2.GameMods.BlackMythWukong.My.Mod = value
+            End Set
+        End Property
         ''' <summary>
         ''' 管理当前游戏的 World 对象。<br/>
         ''' Gets the current World object.
         ''' </summary>
-        Public ReadOnly Property World As New WorldProxy
+        Public ReadOnly Property World As WorldProxy
+            Get
+                Return Nukepayload2.GameMods.BlackMythWukong.My.World
+            End Get
+        End Property
         ''' <summary>
         ''' 当前本地的第一个玩家。<br/>
         ''' Gets the first local player.
         ''' </summary>
-        Public ReadOnly Property Player As New PlayerProxy
+        Public ReadOnly Property Player As PlayerProxy
+            Get
+                Return Nukepayload2.GameMods.BlackMythWukong.My.Player
+            End Get
+        End Property
         ''' <summary>
         ''' 访问当前计算机的设备。<br/>
         ''' Gets the devices of the local computer.
         ''' </summary>
-        Public ReadOnly Property Computer As New ComputerProxy
+        Public ReadOnly Property Computer As ComputerProxy
+            Get
+                Return Nukepayload2.GameMods.BlackMythWukong.My.Computer
+            End Get
+        End Property
         ''' <summary>
         ''' 获取游戏窗口。<br/>
         ''' Gets the game window.
         ''' </summary>
-        Public ReadOnly Property Window As New WindowProxy
+        Public ReadOnly Property Window As WindowProxy
+            Get
+                Return Nukepayload2.GameMods.BlackMythWukong.My.Window
+            End Get
+        End Property
         ''' <summary>
         ''' 获取游戏应用程序的信息。<br/>
         ''' Gets the game app info.
         ''' </summary>
-        Public ReadOnly Property Application As New ModifiedApplicationBase
+        Public ReadOnly Property Application As ModifiedApplicationBase
+            Get
+                Return Nukepayload2.GameMods.BlackMythWukong.My.Application
+            End Get
+        End Property
         ''' <summary>
         ''' 用于向指定的 TraceListeners 输出日志。<br/>
         ''' Enables logging to configured TraceListeners.
         ''' </summary>
-        Public ReadOnly Property Log As New Logging.Log
+        Public ReadOnly Property Log As Logging.Log
+            Get
+                Return Nukepayload2.GameMods.BlackMythWukong.My.Log
+            End Get
+        End Property
     End Module
 
 End Namespace

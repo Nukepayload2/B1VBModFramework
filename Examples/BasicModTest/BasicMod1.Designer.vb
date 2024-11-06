@@ -1,5 +1,4 @@
 ﻿Imports System.Runtime.ExceptionServices
-Imports Nukepayload2.GameMods.BlackMythWukong.Logging
 
 Partial Class BasicMod1
     Inherits ModBase
@@ -22,16 +21,11 @@ Partial Class BasicMod1
         ' 在另一个文件里面，用于初始化组件。这个过程可以是源生成器写的，也可以是人写的。
     End Sub
 
-    Protected Overrides Sub OnLoad()
-        With My.Log.TraceSource.Listeners
-            .Clear()
-            .Add(New FileLogTraceListener With {.Location = LogFileLocation.ModDirectory})
-            .Add(New ConsoleTraceListener)
-        End With
+    Protected Overrides Sub OnInitialized()
+        MyBase.OnInitialized()
         GamePlayDispatcher.Register()
         B1SynchronizationContext.TryInitForGameThread()
         My.Computer.InputManager.StartListening()
-        MyBase.OnLoad()
     End Sub
 
     Protected Overrides Sub OnUnload()

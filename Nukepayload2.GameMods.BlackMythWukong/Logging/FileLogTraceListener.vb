@@ -27,7 +27,7 @@ Namespace Logging
         Private _autoFlush As Boolean
 
         ' Stores the name of the file minus the path, date stamp, and file number
-        Private _baseFileName As String = My.Mod.Name
+        Private _baseFileName As String = If(My.Mod?.Name, "b1-Win64-Shipping")
 
         ' Directory to be used for the log file if Location is set to Custom
         Private _customLocation As String = My.Application.UserAppDataPath

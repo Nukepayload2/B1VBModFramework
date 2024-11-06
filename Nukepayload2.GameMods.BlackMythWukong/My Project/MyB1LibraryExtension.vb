@@ -1,7 +1,7 @@
 ﻿Imports Nukepayload2.GameMods.BlackMythWukong.MyService
 
 Namespace My
-    Module MyB1LibraryExtension
+    Public Module MyB1LibraryExtension
         ''' <summary>
         ''' 管理当前游戏的 World 对象。<br/>
         ''' Gets the current World object.
@@ -31,7 +31,7 @@ Namespace My
         ''' 获取游戏模组的信息。<br/>
         ''' Gets the game MOD info.
         ''' </summary>
-        Public ReadOnly Property [Mod] As New ModBase
+        Public Property [Mod] As ModBase
         ''' <summary>
         ''' 用于向指定的 TraceListeners 输出日志。<br/>
         ''' Enables logging to configured TraceListeners.
