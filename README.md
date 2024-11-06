@@ -23,9 +23,9 @@
     - MsgBox 消息框
     - InputBox 输入框
     - Print 改为了 ShowTip，避免出现歧义
-- Windows Forms 的初始化逻辑
+- 类似于 Windows Forms 和 WPF 的初始化逻辑
     - InitializeComponents
-    - Load 和 Unload 事件
+    - Initialized、Load 和 Unload 事件
 - WPF 的 API
     - Dispatcher
         - BeginInvoke
@@ -59,38 +59,41 @@
 # B1VBModFramework
 A VB MOD framework of Black Myth Wukong.
 
-It's currently in Alpha stage.
+At present, we are in the Alpha stage of development. It's important to note that we cannot currently guarantee source compatibility and binary compatibility.
 
-Requires [B1CSharpLoader 0.0.6](https://github.com/czastack/B1CSharpLoader)
+Requires [B1CSharpLoader 0.0.6/0.0.9](https://github.com/czastack/B1CSharpLoader)
+
 ## Features
 
-### Quick Access to Global Objects
-- Instance of the current MOD
-- `World`
-- `Player` (Controller, Pawn)
+- **Quick Access to Global Objects**
+    - Instance of the current module
+    - World
+    - Player (Controller, Pawn)
 
-### My Extension
-- `My.World`: Accesses related global objects and loads asset files.
-- `My.Player`: Accesses related global objects, events, player's numerical status, gains and debuffs with numbered IDs, as well as special debugging states.
-- `My.Computer`: Handles keyboard, mouse, and gamepad input, as well as in-game sound playback.
-- `My.Window`: Manages the game window state and navigation, as well as pop-up menus on the window.
+- **My Extension**
+    - `My.World` for accessing related global objects and loading asset files.
+    - `My.Player` for accessing related global objects, event collections, player's numerical states, gains with numeric IDs, negative statuses, and debug-specific statuses.
+    - `My.Computer` for handling keyboard, mouse, and controller input keys, network access, and playing game internal sounds.
+    - `My.Window` for managing the game window's state and navigation, as well as popping up menus on the window.
+    - `My.Log` for handling logging functionality. Logs can be written to different trace listeners with settings like file appending, log levels, and file locations.
 
-### VB's Classic Interaction API
-- `MsgBox` for message boxes
-- `InputBox` for input fields
-- `Print` replaced with `ShowTip` to avoid ambiguity
+- **VB Classic Interaction API**
+    - `MsgBox` for displaying dialog boxes
+    - `InputBox` for input dialogs
+    - `Print` replaced by `ShowTip` to avoid ambiguity
 
-### Initialization Logic of Windows Forms
-- `InitializeComponents`
-- `Load` and `Unload` events
+- **Initialization Logic Similar to Windows Forms and WPF**
+    - `InitializeComponents`
+    - `Initialized`, `Load`, and `Unload` events
 
-### Multi-threading API in WPF
-- **Dispatcher**
-  - `BeginInvoke`
-  - `Invoke`
-  - Supports `InvokeAsync` on the game's main thread for async operations
-- **DispatcherTimer**
-- **Sync Context on the Game's Main Thread**
+- **WPF API**
+    - Dispatcher:
+        - BeginInvoke
+        - Invoke
+        - Supports InvokeAsync on the game's main thread
+    - DispatcherTimer: Run timers in a specified Dispatcher.
+    - Sync context on the game's main thread that allows returning to the original thread after using `Await`.
+    - VisualTreeHelper for getting child elements and parent elements.
 
 ## How to compile the library
 - Clone [B1CSharpLoader](https://github.com/czastack/B1CSharpLoader).
