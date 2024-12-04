@@ -1,10 +1,10 @@
 ﻿Imports System.Net.Http
 Imports System.Text
-Imports System.Threading
 Imports b1
 Imports BtlShare
 Imports Newtonsoft.Json
-Imports STUN
+Imports Nukepayload2.AI.Providers.Zhipu
+Imports Nukepayload2.AI.Providers.Zhipu.Models
 
 Class AITest
     Inherits ModComponentBase
@@ -53,6 +53,27 @@ Class AITest
 End Class
 
 Public Module AIHelper
+
+    Private ReadOnly Property ApiKey As String
+        Get
+            Return Environment.GetEnvironmentVariable("ZHIPU_API_KEY")
+        End Get
+    End Property
+
+    Async Function AskZhipuAIAsync(systemMessage As String, userMessage As String) As Task(Of String)
+        If ApiKey = Nothing Then Return "请将智谱 API key 设置到环境变量 ZHIPU_API_KEY 然后重试。"
+        Dim client As New ClientV4(ApiKey, My.Computer.Network.Http)
+        Dim request As New TextRequestBase With {
+            .Model = "glm-4-flash",
+            .Messages = {New MessageItem("system", systemMessage),
+                          New MessageItem("user", userMessage)},
+            .Temperature = 0.7,
+            .TopP = 0.7
+        }
+        Dim response = Await client.Chat.CompleteAsync(request)
+        Dim respMessage = response.Choices?.FirstOrDefault?.Message?.Content
+        Return If(respMessage, "AI 没有回答任何东西")
+    End Function
 
     Async Function AskLocalAIAsync(model As String, requestUrl As String, systemMessage As String, userMessage As String) As Task(Of String)
         Dim request As New With {

@@ -13,6 +13,12 @@ Namespace MyService
         Private ReadOnly _http As New InternalWinHttpHandler
         Private ReadOnly _httpClient As New HttpClient(_http, True)
 
+        Public ReadOnly Property Http As HttpClient
+            Get
+                Return _httpClient
+            End Get
+        End Property
+
         Public Async Function GetAsync(requestUri As String) As Task(Of HttpResponseMessage)
             Return Await _httpClient.GetAsync(requestUri)
         End Function

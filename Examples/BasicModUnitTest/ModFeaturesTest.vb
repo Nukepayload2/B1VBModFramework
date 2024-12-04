@@ -19,6 +19,19 @@ Public Class ModFeaturesTest
     End Function
 
     <TestMethod>
+    Async Function TestZhipuAskAI() As Task
+        Dim userMessage = $"生命值 {100}/{500}
+法力值 {34}/{612}
+耐力 {300}/{300}"
+
+        Dim aiResponse = Await AskZhipuAIAsync(
+                         "你是游戏助手，你负责总结玩家状态值的情况。状态值的格式为：名称 当前数值/最大值。你需要对每个状态值做出简短的总结。",
+                         userMessage)
+        Console.WriteLine(aiResponse)
+        Assert.IsNotNull(aiResponse)
+    End Function
+
+    <TestMethod>
     Public Sub LogTest()
         Dim logger As New Log
         Dim stub As New TraceListenerStub

@@ -32,8 +32,9 @@
     <GameDll Include="GSE.ProtobufDB" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ILMerge.Fody" Version="1.24.0" PrivateAssets="all" />
+    <PackageReference Include="ILMergeVB.Fody" Version="1.25.0-beta2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Nukepayload2.AI.Providers.Zhipu" Version="1.0.0-beta6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Nukepayload2.GameMods.BlackMythWukong\Nukepayload2.GameMods.BlackMythWukong.vbproj" />
