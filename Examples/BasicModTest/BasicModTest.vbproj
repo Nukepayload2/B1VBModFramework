@@ -49,5 +49,8 @@
   <Target AfterTargets="PostBuildEvent" Name="CopyModArtifacts">
     <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
     <Copy SourceFiles="$(TargetDir)System.Net.Http.WinHttpHandler.dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
+    <Copy SourceFiles="$(TargetDir)System.IdentityModel.Tokens.Jwt.dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
+    <Copy SourceFiles="$(TargetDir)Microsoft.IdentityModel.JsonWebTokens.dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
+    <Copy SourceFiles="$(TargetDir)Microsoft.IdentityModel.Tokens.dll" DestinationFolder="$(CSharpLoaderMyModDir)" />
   </Target>
 </Project>

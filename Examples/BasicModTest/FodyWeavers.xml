@@ -2,6 +2,6 @@
 <Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
   <!-- FullImport="true"  NamespacePrefix="Renamed" -->
   <ILMergeVB NamespacePrefix="Dependencies.">
-    <ExcludeAssemblies>System|System.Text.Json|mscorlib|netstandard|System.Buffers|System.Collections.Immutable|System.Memory|System.Numerics.Vectors|System.Reflection.Metadata|System.Runtime.CompilerServices.Unsafe|System.Text.Encodings.Web|System.Threading.Tasks.Extensions|System.ValueTuple|UnrealEngine|UnrealEngine.Runtime|Protobuf.RunTime|BtlSvr.Main|B1UI_GSE.Script|b1.Native|b1.NativePlugins|GSE.Core|Google.Protobuf|System.Core|GSE.ProtobufDB|CSharpModBase</ExcludeAssemblies>
+    <ExcludeAssemblies>System|Microsoft.IdentityModel.JsonWebTokens|Microsoft.IdentityModel.Tokens|System.IdentityModel.Tokens.Jwt|System.Text.Json|mscorlib|netstandard|System.Buffers|System.Collections.Immutable|System.Memory|System.Numerics.Vectors|System.Reflection.Metadata|System.Runtime.CompilerServices.Unsafe|System.Text.Encodings.Web|System.Threading.Tasks.Extensions|System.ValueTuple|UnrealEngine|UnrealEngine.Runtime|Protobuf.RunTime|BtlSvr.Main|B1UI_GSE.Script|b1.Native|b1.NativePlugins|GSE.Core|Google.Protobuf|System.Core|GSE.ProtobufDB|CSharpModBase</ExcludeAssemblies>
   </ILMergeVB>
 </Weavers>
